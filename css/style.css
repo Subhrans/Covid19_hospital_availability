@@ -1,0 +1,75 @@
+@import 'utilities.css';
+:root{
+    --primary: rgb(12, 218, 233);
+    --dark: rgb(0, 0, 0);
+    --pure:rgb(255, 255, 255);
+    --ternary: rgb(124, 78, 93);
+    --light: #eff5e3ec;
+    --secondary: rgb(19, 17, 17);
+
+}
+html{
+    scroll-behavior: smooth;
+}
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    --webkit-font-smotthing:antialiased; 
+}
+
+section{
+    padding: 6rem 0;
+}
+
+section.about .about-me-img{
+    height: 450px;
+    padding: 2rem;
+    margin-left: 15rem;
+}
+
+section.about h1{
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    font-weight: 400;
+   
+}
+section.about h1 span{
+    color: var(--primary);
+}
+
+section.about h3{
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 400;
+}
+section.about p{
+    color: var(--ternary);
+    line-height: 1.9;
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+    margin-right: 20rem;
+    
+}
+
+section.about .social{
+    display: flex;
+}
+
+.section-heading{
+    color: var(--secondary);
+    text-align: center;
+    margin-bottom: 1rem;
+    line-height: 0.5;
+}
+.section-heading span{
+    color: var(--primary);
+
+}
+
+.section-heading + p {
+    color: var(--ternary);
+    margin-bottom: 8rem;    
+    text-align: center;
+
+}
