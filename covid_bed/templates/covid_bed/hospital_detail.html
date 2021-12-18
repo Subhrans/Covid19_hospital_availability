@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+{{hospital.name}}
+{% endblock %}
+{% block content %}
+<div class="container">
+    {% include 'covid_bed/navs.html' %}
+    <div class="card mb-3" style="{% if not map %} max-width:1000px;{% endif %}">
+        <div class="row no-gutters">
+            {% if map %}
+            <div class="col-lg-6 col-md-5">
+                {{map|safe}}
+            </div>
+            {% else %}
+            <div class="col-lg-4 col-md-5">
+                <img src="{% static 'image/hospital.png' %}" alt="" class="img-fluid">
+            </div>
+            {% endif %}
+            <div class="col-lg-6 col-md-7">
+                <div class="card-body">
+                    <h5 class="card-title h4 pb-2"><i class="fa fa-hospital-o" aria-hidden="true"></i>
+                        {{hospital.name}}</h5>
+                    <p class="card-text mb-1"><i class="fa fa-map-marker" aria-hidden="true"></i>
+                        {{hospital.city}}, {{hospital.district}}, {{hospital.state}}
+                    </p>
+                    <p class="card-text">{{hospital.type}}</p>
+                    <p class="card-text">
+                        <i class="fa fa-phone" aria-hidden="true"></i>
+                        <a href="tel:{{hospital.contact}}">{{hospital.contact}}</a>
+                        <span class="px-4">or</span> <i class="fa fa-phone" aria-hidden="true"></i>
+                        <a href="tel:{{hospital.alternative_contact}}">{{hospital.alternative_contact}}</a>
+                    </p>
+                    <hr>
+                    <div class="row text-center">
+                        <div class="col">
+                            <span class="btn btn-info text-white p-1 rounded">
+                            total beds {{total_beds}}
+                            </span>
+                            <span class="btn btn-warning p-1 rounded">
+                            occupied beds {{occupied_beds}}
+                            </span>
+                            <span class="btn btn-success p-1 rounded" style="background-color:#8dcc55 !important;">
+                            vacant beds {{vacant_beds}}
+                            </span>
+                        </div>
+                    </div>
+                    {% if hospital.location %}
+                    <div class="text-center mt-4">
+                        <a href="{{hospital.location}}" class="btn btn-success">
+                            <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                            &nbsp; get direction from your location</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
