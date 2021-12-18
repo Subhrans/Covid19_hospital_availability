@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load get_url %}
 {% block content %}
 <div class="container">
     {% include 'covid_bed/navs.html' %}
@@ -18,7 +19,9 @@
   <tbody>
   {% for hospital in hospitals_list %}
     <tr>
-      <th scope="row">{{hospital.name}}</th>
+      <th scope="row">
+          <a href="{% url 'covid_bed:hospital_detail' hospital.slug %}">{{hospital.name}}</a>
+      </th>
       <td>{{hospital.update_date}}</td>
         {% if hospital.total_beds == 0 %}
             <td>{{hospital.total_general}}</td>

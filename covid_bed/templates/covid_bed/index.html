@@ -44,7 +44,7 @@ Covid19 bed availability
         <div class="col-md-6">
             <div class="row mb-4">
                 {% for state_name,total in hospitals.items %}
-                <div class="col-md-4 mb-4">
+                <div class="col-lg-4 col-sm-6 col-12 mb-4">
                     <div class="card text-center">
                         <a href="{% url 'covid_bed:hospital_list' state_name  %}" class="text-decoration-none text-dark nav-card">
                             <div class="card-header">
@@ -62,7 +62,7 @@ Covid19 bed availability
                 {% endfor %}
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 d-none d-md-block">
             {{map|safe}}
         </div>
     </div>
@@ -92,6 +92,5 @@ window.addEventListener('load',(event) =>{
 
     navigator.geolocation.getCurrentPosition(success, error, options);
 });
-
 </script>
 {% endblock %}

@@ -11,6 +11,7 @@ from django.contrib.auth.models import AbstractUser
 # class Meta(AbstractUser.Meta):
 #     app_label="user"
 #     db_table = "auth.user"
+from django.template.defaultfilters import slugify
 
 
 class State(models.Model):
@@ -78,6 +79,12 @@ class Hospital(models.Model):
     city = models.CharField(max_length=20, null=True, blank=True,)
     type = models.CharField(max_length=20, null=True, blank=True,)
     update_date = models.DateTimeField(auto_now_add=True)
+    slug = models.SlugField(allow_unicode=True,null=True,blank=True)
+
+    def save(self, *args,**kwargs):
+        if not self.id:
+            self.slug = slugify(self.name)
+        return super(Hospital, self).save(*args,**kwargs)
 
     def __str__(self):
         return self.name
