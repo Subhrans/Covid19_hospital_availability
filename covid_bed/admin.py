@@ -18,6 +18,6 @@ admin.site.register(District)
 
 @admin.register(Hospital)
 class HospitalAdmin(admin.ModelAdmin):
-    list_display = ['name', 'state', 'district', 'contact']
+    list_display = ['name','slug', 'state', 'district', 'contact']
     list_filter = ['state','district']
-    search_fields = ['name',]
+    search_fields = ['name','slug']

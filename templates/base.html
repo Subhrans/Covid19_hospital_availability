@@ -16,6 +16,7 @@
     {% endblock %}
 
     </style>
+    <link rel="stylesheet" href="https://unpkg.com/@trevoreyre/autocomplete-js/dist/style.css"/>
 </head>
 
 <body>
@@ -28,9 +29,37 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"
         integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/"
         crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@trevoreyre/autocomplete-js"></script>
+<script>
+    new Autocomplete("#autocomplete",{
+    search: input =>{
+        const url = `{% url 'covid_bed:search' %}?search=${input}`
+        return new Promise(resolve =>{
+            fetch(url)
+            .then(response => response.json())
+            .then(data=>{
+                let names = [];
+                    for (var i = 0; i < data.length; i++) {
+                        names.push(data[i].slug);
+                    }
+                resolve(names)
+            })
+          })
+        },
+        autoSelect: true,
+        renderResult:(result,props) => {
+            return `
+            <li ${props}>
+                <div class="wiki-title">
+                    <a href="/hospital/${result}/" class="text-decoration-none text-secondary">${result.replace(/\-/g,' ')}</a>
+                </div>
+            </li>`;
 
-</body>
+        }
+    });
+</script>
 {% block js %}
 {% endblock %}
+</body>
 
 </html>

@@ -1,3 +1,5 @@
+from django.http import JsonResponse
+from django.template.defaultfilters import slugify
 from django.utils import timezone
 from django.shortcuts import render
 from .models import Hospital, District, State
@@ -38,12 +40,11 @@ def index(request):
     states = State.objects.values('name', )
     lat = 20.5937
     long = 78.9629
-    map = folium.Map(location=(lat,long),zoom_start=4)
+    map = folium.Map(location=(lat, long), zoom_start=4)
     states_total = dict()
     update_date = timezone.now()
     for state in states:
         hospitals = Hospital.objects.select_related('state').filter(state__name=state['name']).order_by('-total_ICU')
-        print(hospitals.count())
         total_beds = 0
         for hospital in hospitals:
             update_date = hospital.update_date
@@ -93,3 +94,42 @@ def about(request):
     :return:
     """
     return render(request, 'covid_bed/about.html')
+
+
+def searchView(request):
+    search = request.GET.get('search')
+    try:
+        if len(search) > 1:
+            objs = list(Hospital.objects.filter(name__icontains=search).values('slug',)) or [
+                {"name": "no result found"}]
+        else:
+            objs = []
+    except ValueError:
+        objs = []
+    return JsonResponse(objs, safe=False)
+
+
+def hostpital_detail_view(request, id=None):
+    id = id.replace("-", ' ')
+    id = slugify(id)
+    print(id)
+    hospital = Hospital.objects.get(slug=id)
+    total_beds = hospital.total_beds + hospital.total_ICU + hospital.total_HDU + hospital.total_isolation + hospital.total_oxygen_general + hospital.total_NMC_reserved + hospital.total_ventilators + hospital.total_general
+    occupied_beds = hospital.occupied_HDU + hospital.occupied_ICU + hospital.occupied_general + hospital.occupied_isolation + hospital.occupied_NMC_reserved + hospital.occupied_oxygen_general
+    vacant_beds = hospital.vacant_HDU + hospital.vacant_ICU + hospital.vacant_isolation + hospital.vacant_general + hospital.vacant_NMC_reserved + hospital.vacant_oxygen_general
+    try:
+        lat = hospital.lat
+        long = hospital.long
+        map = folium.Map(location=(lat, long), zoom_start=14.8)
+        folium.Marker(location=(lat, long), popup=hospital.name, tooltip=hospital.name).add_to(map)
+        map = map._repr_html_()
+    except:
+        map = None
+    context = {
+        'hospital': hospital,
+        "map": map,
+        'total_beds': total_beds,
+        "occupied_beds": occupied_beds,
+        'vacant_beds': vacant_beds
+    }
+    return render(request, 'covid_bed/hospital_detail.html', context)
